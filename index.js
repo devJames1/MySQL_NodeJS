@@ -45,7 +45,7 @@ app.get('/createemployee', (req, res) => {
 app.get('/employee1', (req, res) => {
     let post = {name: 'Jake smith', designation: 'Cheif Executive Oficcer'}
     let sql = 'INSERT INTO employee SET ?'
-    let query = db.query(sql, post, err => {
+    db.query(sql, post, err => {
         if(err) {
             throw err
         }
@@ -53,6 +53,40 @@ app.get('/employee1', (req, res) => {
     })
 })
 
+//select employees
+app.get('/getemployee', (req, res) => {
+    let sql = 'SELECT * FROM employee'
+    db.query(sql, (err, results) => {
+        if(err) {
+            throw err
+        }
+        console.log(results)
+        res.send('Employee details fetched')
+    }) 
+})
+
+//update employee
+app.get('/updateemployee/:id', (req, res) => {
+    let newname = 'Updated name'
+    let sql = `UPDATE employee SET name = '${newname}' WHERE id = ${req.params.id}`
+    db.query(sql, err => {
+        if(err){
+            throw err
+        }
+        res.send('Employee updated')
+    })
+})
+
+//delete employee
+app.get('/deleteemployee/:id', (req, res) => {
+    let sql = `DELETE FROM employee WHERE id = ${req.params.id}`
+    db.query(sql, err => {
+        if(err) {
+            throw err
+        }
+        res.send('Employee deleted')
+    })
+})
 
 // 3000 is always the default port
 app.listen(3000, () => {
